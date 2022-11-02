@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>API Fun</title>
+        <link rel="stylesheet" href="index.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                background-color: rgb(166, 218, 228);
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body onload="loadMessages()">
+        <header>
+            <h1>API Fun</h1>
+            <hr>
+        </header>
+        <article>
+            <section>
+                <div id="content">
+                    <div id="description">
+                        <a style="font-weight: bold;">Description: </a>The API I selected gets bible information (specific verse or range of verses) in various languages including English (US, UK), Latin, Portuguese, and Romanian.
+                    </div>
+                    <br />
+                    <div id="source">
+                        <a style="font-weight: bold;">Source: </a>I found the data from <a href="https://bible-api.com/" target="_blank">https://bible-api.com/</a>
+                    </div>
+                    <br />
+                    <div id="options">
+                        <a style="font-weight: bold;">Options: </a>I used Zephaniah 3:16 option because that is my favorite Bible verse. 
+                    </div>
+                    <br />
+                    <div id="applications">
+                        <a style="font-weight: bold;">Applications: </a>
+                        <ol>
+                            <li>This API would be useful to search the Bible for any reference or keyword (eg. specific verse) directly. So, the users can find what they're looking for quickly.</li>
+                            <li>This API would be useful to see a translated version of the Bible in various languages.</li>
+                          </ol>
+                    </div>
+                    <br />
+                    <h2>Output</h2>
+                    <div id="messages">
+                    </div>
+                </div>
+            </section>
+        </article>
+    </body>
+    <script language="javascript">
+        function loadMessages() {
+			request = new XMLHttpRequest();
+			console.log("1: created request");
+ 
+			request.open("GET", "https://bible-api.com/zeph%203:16", true);
+
+			console.log("2: open success");
+ 	
+			request.onreadystatechange = function() {
+				console.log("3:  event fired");
+			
+				if (request.readyState == 4 && request.status == 200) {
+
+					console.log("5:  data is ready");
+					theData = request.responseText;
+                    data = JSON.parse(theData);
+                    
+                    verses = data["text"];
+					
+					document.getElementById("messages").innerHTML = verses;
+				}
+				else if (request.readyState == 4 && request.status != 200) {
+
+					document.getElementById("messages").innerHTML = "Whoops, something went terribly wrong!";
+
+				}
+
+				else if (request.readyState == 3) {
+
+					console.log("6:  ready state 3- request received,data being sent");
+					document.getElementById("messages").innerHTML = "Come back soon!";
+
+				}
+
+			}
+	
+			request.send();
+			console.log("4 request sent");
+		}
+    </script>
+</html>
